@@ -1,0 +1,9 @@
+{
+	"name": "Vishal-Df1",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b0392298-26f8-439f-8974-5d6411f8c2cd",
+		"tenantId": "2800c0a0-70e9-49be-8733-faeaa6aced99"
+	}
+}
