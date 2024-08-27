@@ -1,0 +1,16 @@
+{
+	"name": "DS_orders_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_destination",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "ord"
+		}
+	}
+}

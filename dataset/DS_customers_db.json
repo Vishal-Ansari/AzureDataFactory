@@ -1,0 +1,57 @@
+{
+	"name": "DS_customers_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_destination",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "customerId",
+				"type": "varchar"
+			},
+			{
+				"name": "firstname",
+				"type": "varchar"
+			},
+			{
+				"name": "lastname",
+				"type": "varchar"
+			},
+			{
+				"name": "email",
+				"type": "varchar"
+			},
+			{
+				"name": "phone_no",
+				"type": "varchar"
+			},
+			{
+				"name": "adress",
+				"type": "varchar"
+			},
+			{
+				"name": "city",
+				"type": "varchar"
+			},
+			{
+				"name": "states",
+				"type": "varchar"
+			},
+			{
+				"name": "zipcode",
+				"type": "varchar"
+			},
+			{
+				"name": "country",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "cust"
+		}
+	}
+}
