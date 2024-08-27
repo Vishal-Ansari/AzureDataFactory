@@ -1,0 +1,16 @@
+{
+	"name": "DS_order_table_created",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_destination",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "created_order_table"
+		}
+	}
+}

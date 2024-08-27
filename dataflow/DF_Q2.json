@@ -1,0 +1,145 @@
+{
+	"name": "DF_Q2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Q2_data",
+						"type": "DatasetReference"
+					},
+					"name": "source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_order_table_created",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_created_cust_table",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_created_product_table",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectproducct"
+				},
+				{
+					"name": "selectcustomer"
+				},
+				{
+					"name": "selectorder"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Row ID} as string,",
+				"          {Order ID} as string,",
+				"          {Order Date} as string,",
+				"          {Ship Date} as string,",
+				"          {Ship Mode} as string,",
+				"          {Customer ID} as string,",
+				"          {Customer Name} as string,",
+				"          Segment as string,",
+				"          Country as string,",
+				"          City as string,",
+				"          State as string,",
+				"          {Postal Code} as string,",
+				"          Region as string,",
+				"          {Product ID} as string,",
+				"          Category as string,",
+				"          {Sub-Category} as string,",
+				"          {Product Name} as string,",
+				"          Sales as string,",
+				"          Quantity as string,",
+				"          Discount as string,",
+				"          Profit as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source",
+				"source select(mapColumn(",
+				"          {Product ID},",
+				"          Category,",
+				"          {Sub-Category},",
+				"          {Product Name},",
+				"          Sales",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectproducct",
+				"source select(mapColumn(",
+				"          {Customer ID},",
+				"          {Customer Name},",
+				"          Segment,",
+				"          Country,",
+				"          City,",
+				"          State,",
+				"          {Postal Code},",
+				"          Region,",
+				"          {Product ID}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcustomer",
+				"source select(mapColumn(",
+				"          {Order ID},",
+				"          {Order Date},",
+				"          {Ship Date},",
+				"          {Ship Mode},",
+				"          {Customer ID},",
+				"          {Product ID},",
+				"          Sales,",
+				"          Quantity,",
+				"          Discount,",
+				"          Profit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectorder",
+				"selectorder sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"selectcustomer sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"selectproducct sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3"
+			]
+		}
+	}
+}

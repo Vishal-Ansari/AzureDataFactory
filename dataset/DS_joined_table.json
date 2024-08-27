@@ -1,0 +1,16 @@
+{
+	"name": "DS_joined_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_destination",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "prep",
+			"table": "custXord"
+		}
+	}
+}

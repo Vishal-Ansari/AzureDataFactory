@@ -1,0 +1,16 @@
+{
+	"name": "DS_created_cust_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_destination",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "created_cust_table"
+		}
+	}
+}
