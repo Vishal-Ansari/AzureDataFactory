@@ -1,0 +1,116 @@
+{
+	"name": "DF_book_data_to_sql",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_books",
+						"type": "DatasetReference"
+					},
+					"name": "books"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_reviews",
+						"type": "DatasetReference"
+					},
+					"name": "review"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_users",
+						"type": "DatasetReference"
+					},
+					"name": "user"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_book_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_reviews_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_users_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          book_id as string,",
+				"          title as string,",
+				"          author as string,",
+				"          publisher as string,",
+				"          description as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> books",
+				"source(output(",
+				"          review_id as string,",
+				"          book_id as string,",
+				"          user_id as string,",
+				"          comment as string,",
+				"          rating as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> review",
+				"source(output(",
+				"          {_id} as string,",
+				"          email as string,",
+				"          password as string,",
+				"          isAdmin as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> user",
+				"books sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"review sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"user sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3"
+			]
+		}
+	}
+}
