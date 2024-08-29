@@ -1,0 +1,24 @@
+{
+	"name": "DS_raw_products_from_blob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_source_blob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS_web_scrap/DS_web_scrap_clean"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "products",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "products.xlsx",
+				"container": "mini-project"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

@@ -1,0 +1,96 @@
+{
+	"name": "DF_enhance_product_data",
+	"properties": {
+		"folder": {
+			"name": "DF_web_scrap"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_clean_products_to_sql",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "concatenate",
+					"description": "Concatinating two categories due to some null values in categories level 2"
+				},
+				{
+					"name": "rearrangeColumne"
+				},
+				{
+					"name": "average",
+					"description": "finding the avegrade price and shipping days for the product"
+				},
+				{
+					"name": "cast1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          categoryName_lv_1 as string,",
+				"          categoryName_lv_2 as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 derive(Categories_lv1_lv2_combined = categoryName_lv_1 + '-' +categoryName_lv_2) ~> concatenate",
+				"concatenate select(mapColumn(",
+				"          seriesCode,",
+				"          seriesName,",
+				"          categoryCode,",
+				"          Categories_lv1_lv2_combined,",
+				"          categoryName_lv_3,",
+				"          brandName,",
+				"          minStandardDaysToShip,",
+				"          maxStandardDaysToShip,",
+				"          minPricePerPiece,",
+				"          maxPricePerPiece",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> rearrangeColumne",
+				"rearrangeColumne derive(avgPrice = (maxPricePerPiece+minPricePerPiece)/2.0,",
+				"          avgShippingDays = (minStandardDaysToShip+maxStandardDaysToShip)/2.0) ~> average",
+				"average cast(output(",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

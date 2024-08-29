@@ -1,0 +1,353 @@
+{
+	"name": "DF_fact_tables_from_newproducts",
+	"properties": {
+		"folder": {
+			"name": "DF_web_scrap"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "Products",
+					"description": "having the product table separate with product details and category code"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "catogories",
+					"description": "having only catogory id and category name"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "CategoriesPopularity"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "BrandPopularity"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "brandVariants"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_products_ready_for_facts",
+						"type": "DatasetReference"
+					},
+					"name": "BrandDiversity"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_fact_products",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_fact_categories",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_fact_top_categories",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_fact_brand_popularity",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_fact_top_brands_variants",
+						"type": "DatasetReference"
+					},
+					"name": "sink5"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_fact_brandVariants",
+						"type": "DatasetReference"
+					},
+					"name": "sink6"
+				}
+			],
+			"transformations": [
+				{
+					"name": "producttable",
+					"description": "removing the categories name from the product table"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "sort2"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "aggregate2"
+				},
+				{
+					"name": "sort3"
+				},
+				{
+					"name": "aggregate3"
+				},
+				{
+					"name": "sort4"
+				},
+				{
+					"name": "aggregate4"
+				},
+				{
+					"name": "sort5"
+				},
+				{
+					"name": "aggregate5"
+				},
+				{
+					"name": "sort6"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Products",
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> catogories",
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> CategoriesPopularity",
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> BrandPopularity",
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> brandVariants",
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          Categories_lv1_lv2_combined as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer,",
+				"          avgPrice as float,",
+				"          avgShippingDays as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> BrandDiversity",
+				"Products select(mapColumn(",
+				"          seriesCode,",
+				"          seriesName,",
+				"          categoryCode,",
+				"          brandName,",
+				"          minStandardDaysToShip,",
+				"          maxStandardDaysToShip,",
+				"          minPricePerPiece,",
+				"          maxPricePerPiece,",
+				"          avgPrice,",
+				"          avgShippingDays",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> producttable",
+				"catogories select(mapColumn(",
+				"          categoryCode,",
+				"          Categories_lv1_lv2_combined,",
+				"          categoryName_lv_3",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sort(asc(categoryCode, true)) ~> sort1",
+				"producttable sort(asc(categoryCode, true)) ~> sort2",
+				"sort1 aggregate(groupBy(categoryCode),",
+				"     each(match(name!='categoryCode'), $$ = first($$))) ~> aggregate1",
+				"CategoriesPopularity aggregate(groupBy(categoryCode,",
+				"          categoryName_lv_3),",
+				"     counts_in_this_category = count()) ~> aggregate2",
+				"aggregate2 sort(desc(counts_in_this_category, true)) ~> sort3",
+				"BrandPopularity aggregate(groupBy(brandName),",
+				"     count = count()) ~> aggregate3",
+				"aggregate3 sort(desc(count, true)) ~> sort4",
+				"brandVariants aggregate(groupBy(categoryName_lv_3,",
+				"          brandName),",
+				"     variant_Count = count()) ~> aggregate4",
+				"aggregate4 sort(desc(variant_Count, true)) ~> sort5",
+				"BrandDiversity aggregate(groupBy(categoryCode,",
+				"          categoryName_lv_3),",
+				"     brandDiversity = countDistinct(brandName)) ~> aggregate5",
+				"aggregate5 sort(desc(brandDiversity, true)) ~> sort6",
+				"sort2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"sort3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3",
+				"sort4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink4",
+				"sort5 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink5",
+				"sort6 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink6"
+			]
+		}
+	}
+}

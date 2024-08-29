@@ -1,0 +1,155 @@
+{
+	"name": "DF_book_clean_and_merge",
+	"properties": {
+		"folder": {
+			"name": "DF_book_review_site"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_books_sql",
+						"type": "DatasetReference"
+					},
+					"name": "books"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_reviews_sql",
+						"type": "DatasetReference"
+					},
+					"name": "reviews"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_users_sql",
+						"type": "DatasetReference"
+					},
+					"name": "users"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_final_book",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "removeduplicate"
+				},
+				{
+					"name": "reviewuplicate"
+				},
+				{
+					"name": "userduplicate"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          book_id as string,",
+				"          title as string,",
+				"          author as string,",
+				"          publisher as string,",
+				"          description as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> books",
+				"source(output(",
+				"          review_id as string,",
+				"          book_id as string,",
+				"          user_id as string,",
+				"          comment as string,",
+				"          rating as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> reviews",
+				"source(output(",
+				"          user_id as string,",
+				"          email as string,",
+				"          password as string,",
+				"          isAdmin as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> users",
+				"books aggregate(groupBy(book_id),",
+				"     each(match(name!= 'book_id'), $$ = first($$))) ~> removeduplicate",
+				"reviews aggregate(groupBy(review_id),",
+				"     each(match(name!='review_id'), $$ = first($$))) ~> reviewuplicate",
+				"users aggregate(groupBy(user_id),",
+				"     each(match(name!='user_id'), $$ = first($$))) ~> userduplicate",
+				"removeduplicate, reviewuplicate join(removeduplicate@book_id == reviewuplicate@book_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          title,",
+				"          author,",
+				"          publisher,",
+				"          description,",
+				"          review_id,",
+				"          book_id = reviewuplicate@book_id,",
+				"          user_id,",
+				"          comment,",
+				"          rating",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1, userduplicate join(select1@user_id == userduplicate@user_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          title,",
+				"          author,",
+				"          publisher,",
+				"          description,",
+				"          review_id,",
+				"          book_id,",
+				"          comment,",
+				"          rating,",
+				"          user_id = userduplicate@user_id,",
+				"          email,",
+				"          password,",
+				"          isAdmin",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

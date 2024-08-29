@@ -5,6 +5,9 @@
 			"referenceName": "Book_review_site",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "DS_book_review_site/DS_book_review_site_blob"
+		},
 		"annotations": [],
 		"type": "MongoDbAtlasCollection",
 		"schema": [],

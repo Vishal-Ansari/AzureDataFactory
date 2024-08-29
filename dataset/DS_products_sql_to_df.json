@@ -1,0 +1,68 @@
+{
+	"name": "DS_products_sql_to_df",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_book_reviews_database",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS_web_scrap/DS_web_scrap_clean"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "seriesCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "seriesName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "categoryCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "categoryName_lv_1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "categoryName_lv_2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "categoryName_lv_3",
+				"type": "nvarchar"
+			},
+			{
+				"name": "brandName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "minStandardDaysToShip",
+				"type": "nvarchar"
+			},
+			{
+				"name": "maxStandardDaysToShip",
+				"type": "nvarchar"
+			},
+			{
+				"name": "priceCheckLessFlag",
+				"type": "nvarchar"
+			},
+			{
+				"name": "minPricePerPiece",
+				"type": "nvarchar"
+			},
+			{
+				"name": "maxPricePerPiece",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "products"
+		}
+	}
+}

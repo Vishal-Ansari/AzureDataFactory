@@ -1,0 +1,208 @@
+{
+	"name": "PL_raw_products_blob_to_sql",
+	"properties": {
+		"activities": [
+			{
+				"name": "products_blob_to_sql",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "seriesCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "seriesCode",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "seriesName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "seriesName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "categoryCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "categoryCode",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "categoryName_lv_1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "categoryName_lv_1",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "categoryName_lv_2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "categoryName_lv_2",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "categoryName_lv_3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "categoryName_lv_3",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "brandName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "brandName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "minStandardDaysToShip",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "minStandardDaysToShip",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "maxStandardDaysToShip",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "maxStandardDaysToShip",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "priceCheckLessFlag",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "priceCheckLessFlag",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "minPricePerPiece",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "minPricePerPiece",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "maxPricePerPiece",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "maxPricePerPiece",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_raw_products_from_blob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_raw_products_to_sql",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "PL_web_scrap"
+		},
+		"annotations": []
+	}
+}

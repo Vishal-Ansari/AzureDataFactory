@@ -5,6 +5,9 @@
 			"referenceName": "LS_book_reviews_database",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "DS_book_review_site/DS_book_review_site_sql"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],

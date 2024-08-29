@@ -138,6 +138,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "PL_book_review_site"
+		},
 		"annotations": []
 	}
 }

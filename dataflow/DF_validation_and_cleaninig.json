@@ -1,0 +1,99 @@
+{
+	"name": "DF_validation_and_cleaninig",
+	"properties": {
+		"folder": {
+			"name": "DF_web_scrap"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_products_sql_to_df",
+						"type": "DatasetReference"
+					},
+					"name": "rawProducts"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_clean_products_to_sql",
+						"type": "DatasetReference"
+					},
+					"name": "cleandata"
+				}
+			],
+			"transformations": [
+				{
+					"name": "removePriceCheckFlag",
+					"description": "removing the price check flag containig only 0 value "
+				},
+				{
+					"name": "removeDuplicates"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "filter1",
+					"description": "remove the data which doesnt have min max price"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          seriesCode as string,",
+				"          seriesName as string,",
+				"          categoryCode as string,",
+				"          categoryName_lv_1 as string,",
+				"          categoryName_lv_2 as string,",
+				"          categoryName_lv_3 as string,",
+				"          brandName as string,",
+				"          minStandardDaysToShip as integer,",
+				"          maxStandardDaysToShip as integer,",
+				"          priceCheckLessFlag as integer,",
+				"          minPricePerPiece as integer,",
+				"          maxPricePerPiece as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> rawProducts",
+				"rawProducts select(mapColumn(",
+				"          seriesCode,",
+				"          seriesName,",
+				"          categoryCode,",
+				"          categoryName_lv_1,",
+				"          categoryName_lv_2,",
+				"          categoryName_lv_3,",
+				"          brandName,",
+				"          minStandardDaysToShip,",
+				"          maxStandardDaysToShip,",
+				"          minPricePerPiece,",
+				"          maxPricePerPiece",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> removePriceCheckFlag",
+				"sort1 aggregate(groupBy(seriesCode),",
+				"     each(match(name!='seriesCode'), $$ = first($$))) ~> removeDuplicates",
+				"removePriceCheckFlag sort(asc(categoryName_lv_3, true)) ~> sort1",
+				"removeDuplicates filter(!isNull(minPricePerPiece) || !isNull(maxPricePerPiece)) ~> filter1",
+				"filter1 derive(minPricePerPiece = iif(isNull(minPricePerPiece), maxPricePerPiece, minPricePerPiece),",
+				"          maxPricePerPiece = iif(isNull(maxPricePerPiece),minPricePerPiece,maxPricePerPiece)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> cleandata"
+			]
+		}
+	}
+}

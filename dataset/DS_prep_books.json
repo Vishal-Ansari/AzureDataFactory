@@ -1,18 +1,18 @@
 {
-	"name": "DS_books_sql",
+	"name": "DS_prep_books",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_book_reviews_database",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DS_book_review_site/DS_book_review_site_sql"
+			"name": "DS_book_review_site/DS_book_review_site_clean"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
+			"schema": "prep",
 			"table": "books"
 		}
 	}
