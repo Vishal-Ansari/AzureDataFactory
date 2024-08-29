@@ -1,0 +1,25 @@
+{
+	"name": "Trigger_book_review",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_book_review_site",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 1,
+				"startTime": "2024-08-29T09:32:00",
+				"endTime": "2024-08-30T09:32:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

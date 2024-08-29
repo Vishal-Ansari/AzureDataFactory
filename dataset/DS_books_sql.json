@@ -1,0 +1,16 @@
+{
+	"name": "DS_books_sql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_book_reviews_database",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "books"
+		}
+	}
+}

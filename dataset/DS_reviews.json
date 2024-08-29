@@ -1,0 +1,15 @@
+{
+	"name": "DS_reviews",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Book_review_site",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MongoDbAtlasCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "reviews"
+		}
+	}
+}
